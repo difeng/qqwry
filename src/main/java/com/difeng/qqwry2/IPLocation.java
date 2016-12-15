@@ -116,7 +116,7 @@ public class IPLocation {
 		    long indexIP = read4ByteAsLong((int)(firstIndexOffset + (mid - 1) * IP_RECORD_LENGTH));
 	        long indexIPNext = read4ByteAsLong((int)(firstIndexOffset + mid * IP_RECORD_LENGTH));
 		    if(indexIP <= ip && ip < indexIPNext){
-		    	return read4ByteAsLong((int)(firstIndexOffset + (mid - 1) * IP_RECORD_LENGTH + 4));
+		    	return read3ByteAsLong((int)(firstIndexOffset + (mid - 1) * IP_RECORD_LENGTH + 4));
 		    }else{
 		    	if(ip > indexIP){
 				    low = mid;
@@ -215,7 +215,7 @@ public class IPLocation {
 		String [] arr = ipStr.split("\\.");
 		long ip = (Long.parseLong(arr[0])  & 0xFFL) << 24 & 0xFF000000L;
 		ip |=  (Long.parseLong(arr[1])  & 0xFFL) << 16 & 0xFF0000L;
-		ip |=  (Long.parseLong(arr[2])  & 0xFFL) << 8 & 0xFF0000L;
+		ip |=  (Long.parseLong(arr[2])  & 0xFFL) << 8 & 0xFF00L;
 		ip |=  (Long.parseLong(arr[3])  & 0xFFL);
 		return ip;
 	}
