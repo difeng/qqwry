@@ -13,7 +13,7 @@ public class IPLocationTest extends TestCase {
 	
     public void testThreadSafe() throws Exception {
     	final IPLocation ipl = new IPLocation(IPLocation.class.getResource("/qqwry.dat").getPath());
-		int num = 4;
+		int num = 1;
 		ExecutorService es = Executors.newFixedThreadPool(num);
 		long start = System.currentTimeMillis();
 		for (int i = 0; i < num;i++) {

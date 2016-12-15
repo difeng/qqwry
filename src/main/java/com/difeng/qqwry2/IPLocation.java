@@ -129,9 +129,15 @@ public class IPLocation {
 	}
 	
 	public Location location(String ip){
-		long offset = search(inet_pton(ip));
-		if(offset != -1){
-			return fetchLocation((int)offset);
+		long numericIp = inet_pton(ip);
+		lock.lock();
+		long offset = search(numericIp);
+		try{
+			if(offset != -1){
+				return fetchLocation((int)offset);
+			}
+		} finally {
+		    lock.unlock();
 		}
 		return null;
 	}

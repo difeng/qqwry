@@ -191,17 +191,16 @@ public class IPLocation {
 	}
 
 	public  Location location(String ip) {
-		Location loc = null;
 		lock.lock();
 		try {
 			long offset = search(inet_pton(ip));
 			if(offset != -1){
-				loc =  fetchIPLocation(offset);
+				return fetchIPLocation(offset);
 			}
 		} finally {
 			lock.unlock();
 		}
-		return loc;
+		return null;
 	}
 }
 
