@@ -10,7 +10,7 @@ final IPLocation ipLocation = new IPLocation(filePath);
 Location loc = ipl.location("182.92.240.50");
 System.out.printf("%s %s",loc.country,loc.area);
 ```
-两种实现方式都不用重启就可实现升级qqwry.dat文件，只要用新文件将旧文件覆盖，程序会自动检查文件更新时间，从而重新加载加载，通过修改IPLocation类中的常量enableFileWatch=true来开启，默认是关闭的。
+两种实现方式都不用重启就可实现升级qqwry.dat文件，只要用新文件将旧文件覆盖，程序会自动检查文件最后修改时间，若最后修改时间大于上一次时间，则重新加载数据文件，通过修改IPLocation类中的常量enableFileWatch=true来开启，默认是关闭的。
 
 > ####建议  
 不需要热升级IP数据库文件时，使用方式二，效率较高  
