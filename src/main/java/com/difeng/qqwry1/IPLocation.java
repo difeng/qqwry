@@ -45,7 +45,7 @@ public class IPLocation {
 		}
 	}
 
-	public void watch(){
+	private void watch(){
 		Executors.newScheduledThreadPool(1).scheduleAtFixedRate(new Runnable() {
 			@Override
 			public void run() {
@@ -74,7 +74,7 @@ public class IPLocation {
 
 
 	@SuppressWarnings("resource")
-	public void load() throws Exception {
+	private void load() throws Exception {
 		lastModifyTime = qqwryFile.lastModified();
 		lock.lock();
 		try {
@@ -98,7 +98,7 @@ public class IPLocation {
 	 * @return
 	 * @return:long
 	 */
-	public static long inet_pton(String ipStr) {
+	private static long inet_pton(String ipStr) {
 		if(ipStr == null){
 			throw new NullPointerException("ip不能为空");
 		}
@@ -110,7 +110,7 @@ public class IPLocation {
 		return ip;
 	}
 
-	public long search(long ip) {
+	private long search(long ip) {
 		long low = 0;
 		long high = totalIndexCount;
 		long mid = 0;

@@ -110,7 +110,7 @@ public class IPLocation {
 		return val;
 	}
     
-	public long search(long ip) {
+	private long search(long ip) {
 		long low = 0;
 		long high = totalIndexCount;
 		long mid = 0;
@@ -209,7 +209,7 @@ public class IPLocation {
      * @return	t
      * @return:long
      */
-	public static long inet_pton(String ipStr) {
+	private static long inet_pton(String ipStr) {
 		if(ipStr == null){
 			throw new NullPointerException("ip不能为空");
 		}
