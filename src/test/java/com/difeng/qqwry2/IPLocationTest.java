@@ -3,6 +3,7 @@ import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import com.difeng.qqwry2.IPLocation;
+import junit.framework.Assert;
 import junit.framework.TestCase;
 /**
  * @Description:TODO
@@ -38,5 +39,11 @@ public class IPLocationTest extends TestCase {
 		}
 		System.out.println(System.currentTimeMillis() - start);
 	}
+    
+    public void testLocation() throws Exception { 
+    	final IPLocation ipLocation = new IPLocation(IPLocation.class.getResource("/qqwry.dat").getPath());
+    	Location loc = ipLocation.location("182.92.240.50");
+    	Assert.assertNotNull(loc);
+    }
 }
 

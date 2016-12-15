@@ -43,6 +43,7 @@ public class IPLocation {
 			watch();
 		}
 	}
+	
     private void watch() {
     	Executors.newScheduledThreadPool(1).scheduleAtFixedRate(new Runnable() {
 			@Override
@@ -52,18 +53,20 @@ public class IPLocation {
 					lastModifyTime = time;
 					try {
 						load();
+						System.out.println("reload");
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
 				}
 			}
-		}, 1000L, 30000L, TimeUnit.MILLISECONDS);
+		}, 1000L, 5000L, TimeUnit.MILLISECONDS);
     }
+    
 	private void load() throws Exception {
 		lastModifyTime = qqwryFile.lastModified();
-		lock.lock();
 		ByteArrayOutputStream out = null;
 		FileInputStream in = null;
+		lock.lock();
 		try {
 			out = new ByteArrayOutputStream();
 			byte[] b = new byte[1024];
@@ -107,7 +110,7 @@ public class IPLocation {
 		return val;
 	}
     
-	public long search(long ip){
+	public long search(long ip) {
 		long low = 0;
 		long high = totalIndexCount;
 		long mid = 0;
@@ -128,12 +131,12 @@ public class IPLocation {
 		return -1;
 	}
 	
-	public Location location(String ip){
+	public Location location(String ip) {
 		long numericIp = inet_pton(ip);
 		lock.lock();
 		long offset = search(numericIp);
 		try{
-			if(offset != -1){
+			if(offset != -1) {
 				return fetchLocation((int)offset);
 			}
 		} finally {
@@ -142,29 +145,24 @@ public class IPLocation {
 		return null;
 	}
 	
-	private Location fetchLocation(final int offset){
+	private Location fetchLocation(final int offset) {
 		Location loc = new Location();
 		try {
-			//跳过4字节ip,读取第一个字节判断是否标志字节
-			byte b = data[offset + 4];
-			if (b == REDIRECT_MODE_1) {
-				//读取国家偏移
+			byte redirectMode = data[offset + 4];
+			if (redirectMode == REDIRECT_MODE_1) {
 				long countryOffset = read3ByteAsLong((int)offset + 5);
-				//再检查一次标志字节,因为这个时候这个地方仍然可能是个重定向
-				b = data[(int)countryOffset];
-				if (b == REDIRECT_MODE_2) {
+				redirectMode = data[(int)countryOffset];
+				if (redirectMode == REDIRECT_MODE_2) {
 					final QQwryString country = readString((int)read3ByteAsLong((int)countryOffset + 1));
 					loc.country = country.string;
 					countryOffset = countryOffset + 4;
 				} else {
 					final QQwryString country = readString((int)countryOffset);
 					loc.country = country.string;
-					//接着国家结束的位置
 					countryOffset += country.byteCount;
 				}
-				//读取地区标志
 				loc.area = readArea((int)countryOffset);
-			} else if (b == REDIRECT_MODE_2) {
+			} else if (redirectMode == REDIRECT_MODE_2) {
 				loc.country = readString((int)read3ByteAsLong((int)offset + 5)).string;
 				loc.area = readArea((int)offset + 8);
 			} else {
@@ -179,18 +177,20 @@ public class IPLocation {
 	}
 
 	private String readArea(final int offset) {
-		byte b = data[offset];
-		if (b == REDIRECT_MODE_1 || b == REDIRECT_MODE_2) {
+		byte redirectMode = data[offset];
+		if (redirectMode == REDIRECT_MODE_1 || redirectMode == REDIRECT_MODE_2) {
 			long areaOffset = read3ByteAsLong((int)offset + 1);
-			if (areaOffset == 0)
+			if (areaOffset == 0) {
 				return "";
-			else
+			} else {
 				return readString((int)areaOffset).string;
-		} else
+			}
+		} else {
 			return readString(offset).string;
+		}
 	}
 	
-	private QQwryString readString(int offset){
+	private QQwryString readString(int offset) {
 		byte[] b = new byte[128];
 		int i = 0;
 		while(data[offset] != 0){
@@ -198,17 +198,18 @@ public class IPLocation {
 		}
 		try{
 			return new QQwryString(new String(b,0,i,"GBK"),i);
-		}catch(UnsupportedEncodingException e){
+		} catch(UnsupportedEncodingException e) {
 			return new QQwryString("",0);
 		}
 	}
+	
 	 /**
      * @Description:“.”号分隔的字符串转换为long类型的数字
      * @param ipStr
-     * @return
+     * @return	t
      * @return:long
      */
-	public static long inet_pton(String ipStr){
+	public static long inet_pton(String ipStr) {
 		if(ipStr == null){
 			throw new NullPointerException("ip不能为空");
 		}
@@ -221,8 +222,11 @@ public class IPLocation {
 	}
 	
 	private class QQwryString{
+		
 		public final String string;
+		
 		public final int byteCount;
+		
 		public QQwryString(final String string,final int byteCount) {
 			this.string = string;
 			this.byteCount = byteCount;

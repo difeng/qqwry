@@ -75,6 +75,7 @@ public class IPLocation {
 
 	@SuppressWarnings("resource")
 	public void load() throws Exception {
+		lastModifyTime = qqwryFile.lastModified();
 		lock.lock();
 		try {
 			mbbFile =  new RandomAccessFile(qqwryFile, "r")
