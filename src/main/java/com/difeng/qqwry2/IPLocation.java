@@ -146,7 +146,7 @@ public class IPLocation {
 	}
 	
 	private Location fetchLocation(final int offset) {
-		Location loc = new Location();
+		final Location loc = new Location();
 		try {
 			byte redirectMode = data[offset + 4];
 			if (redirectMode == REDIRECT_MODE_1) {
@@ -159,16 +159,16 @@ public class IPLocation {
 				} else {
 					final QQwryString country = readString((int)countryOffset);
 					loc.country = country.string;
-					countryOffset += country.byteCount;
+					countryOffset += country.byteCountWithEnd;
 				}
 				loc.area = readArea((int)countryOffset);
 			} else if (redirectMode == REDIRECT_MODE_2) {
 				loc.country = readString((int)read3ByteAsLong((int)offset + 5)).string;
 				loc.area = readArea((int)offset + 8);
 			} else {
-				final QQwryString country = readString((int)offset + 3);
+				final QQwryString country = readString((int)offset + 4);
 				loc.country = country.string;
-				loc.area = readArea((int)offset + 3 + country.byteCount);
+				loc.area = readArea((int)offset + 4 + country.byteCountWithEnd);
 			}
 			return loc;
 		} catch (Exception e) {
@@ -192,12 +192,10 @@ public class IPLocation {
 	
 	private QQwryString readString(int offset) {
 		byte[] b = new byte[128];
-		int i = 0;
-		while(data[offset] != 0){
-			b[i++] = data[offset++];
-		}
+		int i;
+		for (i = 0, b[i] = data[offset++]; b[i] != 0; b[++i] = data[offset++]);
 		try{
-			return new QQwryString(new String(b,0,i,"GBK"),i);
+			   return new QQwryString(new String(b,0,i,"GBK"),i + 1);
 		} catch(UnsupportedEncodingException e) {
 			return new QQwryString("",0);
 		}
@@ -225,11 +223,11 @@ public class IPLocation {
 		
 		public final String string;
 		
-		public final int byteCount;
+		public final int byteCountWithEnd;
 		
-		public QQwryString(final String string,final int byteCount) {
+		public QQwryString(final String string,final int byteCountWithEnd) {
 			this.string = string;
-			this.byteCount = byteCount;
+			this.byteCountWithEnd = byteCountWithEnd;
 		}
 		
 		@Override
