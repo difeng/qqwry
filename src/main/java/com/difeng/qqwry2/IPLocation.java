@@ -131,13 +131,13 @@ public class IPLocation {
 		return -1;
 	}
 	
-	public Location location(String ip) {
+	public Location fetchIPLocation(String ip) {
 		long numericIp = inet_pton(ip);
 		lock.lock();
 		long offset = search(numericIp);
 		try{
 			if(offset != -1) {
-				return fetchLocation((int)offset);
+				return readIPLocation((int)offset);
 			}
 		} finally {
 		    lock.unlock();
@@ -145,7 +145,7 @@ public class IPLocation {
 		return null;
 	}
 	
-	private Location fetchLocation(final int offset) {
+	private Location readIPLocation(final int offset) {
 		final Location loc = new Location();
 		try {
 			byte redirectMode = data[offset + 4];
@@ -191,9 +191,10 @@ public class IPLocation {
 	}
 	
 	private QQwryString readString(int offset) {
-		byte[] b = new byte[128];
+		int pos = offset;
+		final byte[] b = new byte[128];
 		int i;
-		for (i = 0, b[i] = data[offset++]; b[i] != 0; b[++i] = data[offset++]);
+		for (i = 0, b[i] = data[pos++]; b[i] != 0; b[++i] = data[pos++]);
 		try{
 			   return new QQwryString(new String(b,0,i,"GBK"),i + 1);
 		} catch(UnsupportedEncodingException e) {
@@ -234,6 +235,7 @@ public class IPLocation {
 		public String toString() {
 			return string;
 		}
+		
 	}
 }
 

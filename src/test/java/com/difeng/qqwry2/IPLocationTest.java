@@ -21,10 +21,10 @@ public class IPLocationTest extends TestCase {
 			es.execute(new Runnable(){
 				final Random rd = new Random();
 				public void run(){
-					int n = 100000;
+					int n = 10000;
 					for(int i = 0;i < n;i++){
 						String ip = (rd.nextInt(253) + 1) + "." + rd.nextInt(255) + "." + rd.nextInt(255) + "." + (rd.nextInt(253) + 1);	
-						ipl.location(ip);
+						ipl.fetchIPLocation(ip);
 					}
 				}
 			});
@@ -42,7 +42,7 @@ public class IPLocationTest extends TestCase {
     
     public void testLocation() throws Exception { 
     	final IPLocation ipLocation = new IPLocation(IPLocation.class.getResource("/qqwry.dat").getPath());
-    	Location loc = ipLocation.location("182.92.240.50");
+    	Location loc = ipLocation.fetchIPLocation("167.22.60.127");
     	Assert.assertNotNull(loc);
     }
 }

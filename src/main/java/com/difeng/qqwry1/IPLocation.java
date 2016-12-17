@@ -131,7 +131,7 @@ public class IPLocation {
 		return -1;
 	}
 
-	private Location fetchIPLocation(long offset) {
+	private Location readIPLocation(long offset) {
 		try {
 			mbbFile.position((int)offset + 4);
 			Location loc = new Location();
@@ -191,12 +191,12 @@ public class IPLocation {
 		return "";
 	}
 
-	public  Location location(String ip) {
+	public  Location fetchIPLocation(String ip) {
 		lock.lock();
 		try {
 			long offset = search(inet_pton(ip));
 			if(offset != -1){
-				return fetchIPLocation(offset);
+				return readIPLocation(offset);
 			}
 		} finally {
 			lock.unlock();

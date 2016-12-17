@@ -24,7 +24,7 @@ public class IPLocationTest extends TestCase{
 					int n = 10000;
 					for(int i = 0;i < n;i++) {
 						String ip = (rd.nextInt(253) + 1) + "." + rd.nextInt(255) + "." + rd.nextInt(255) + "." + (rd.nextInt(253) + 1);	
-						ipLocation.location(ip);
+						ipLocation.fetchIPLocation(ip);
 					}
 				}
 			});
@@ -42,7 +42,7 @@ public class IPLocationTest extends TestCase{
     
     public void testLocation() throws Exception { 
     	final IPLocation ipLocation = new IPLocation(IPLocation.class.getResource("/qqwry.dat").getPath());
-    	Location loc = ipLocation.location("182.92.240.50");
+    	Location loc = ipLocation.fetchIPLocation("182.92.240.50");
     	Assert.assertNotNull(loc);
     }
 }
