@@ -2,11 +2,9 @@ package com.difeng.qqwry1;
 import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
 import junit.framework.Assert;
 import junit.framework.TestCase;
 /**
- * @Description:TODO
  * @author:difeng
  * @date:2016年12月14日
  */
