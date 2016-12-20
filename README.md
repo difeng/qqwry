@@ -16,7 +16,7 @@ System.out.printf("%s %s",loc.country,loc.area);
 不需要热升级IP数据库文件时，使用方式二，效率较高  
 此外，使用两种方式都可以，效率上没有太大差别
 
-### 新添转化功能，将原文件格式转换为新格式，新格式比较简单去掉了原来的重定向标志。
+### 新添转化功能，将原文件格式转换为新格式，新格式比较简单去掉了原来的重定向标志,国家和地区单独存放,索引里分别记录的国家和地区的地址。
 新格式如下：
 ```sh
 +----------+
@@ -44,7 +44,8 @@ System.out.printf("%s %s",loc.country,loc.area);
 ```
 转换方法：
 ```java
-final IPFileConvertor convertor = new IPFileConvertor(IPFileConvertor.class.getResource("/qqwry.dat").getPath(),"./qqwry.dat");
+final IPFileConvertor convertor = new 
+IPFileConvertor(IPFileConvertor.class.getResource("/qqwry.dat").getPath(),"./qqwry.dat");
 convertor.convert();
 ```
 新格式使用方法和之前一致，使用com.difeng.convert包下的解析类IPLocation解析即可。
