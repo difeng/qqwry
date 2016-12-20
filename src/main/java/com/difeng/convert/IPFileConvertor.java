@@ -30,34 +30,34 @@ import java.util.concurrent.locks.ReentrantLock;
 public class IPFileConvertor {
 
 	private  byte[] data;
-	
+
 	private  long firstIndexOffset;
-	
+
 	private  long lastIndexOffset;
-	
+
 	private  long totalIndexCount;
-	
+
 	private static final byte REDIRECT_MODE_1 = 0x01;
-	
+
 	private static final byte REDIRECT_MODE_2 = 0x02;
-	
+
 	static   final long IP_RECORD_LENGTH = 7;
-	
+
 	private static ReentrantLock lock = new ReentrantLock();
-	
+
 	public static boolean enableFileWatch = false;
-	
+
 	private File origionalQQwryFile;
-	
+
 	private File newFormatFile; 
-	
+
 	public IPFileConvertor(String  origionalQQwryFilePath,String newFormatFilePath) throws Exception {
 		this.origionalQQwryFile = new File(origionalQQwryFilePath);
 		this.newFormatFile = new File(newFormatFilePath);
 		load();
 	}
-	
-	
+
+
 	private void load() throws Exception {
 		ByteArrayOutputStream out = null;
 		FileInputStream in = null;
@@ -89,7 +89,7 @@ public class IPFileConvertor {
 			lock.unlock();
 		}
 	}
-	
+
 	private long read4ByteAsLong(final int  offset){
 		long val = data[offset] & 0xFF;
 		val |= (data[offset + 1] << 8L) & 0xFF00L;
@@ -104,30 +104,30 @@ public class IPFileConvertor {
 		val |= (data[offset + 2] << 16) & 0xFF0000L;
 		return val;
 	}
-    
+
 	private long search(long ip) {
 		long low = 0;
 		long high = totalIndexCount;
 		long mid = 0;
 		while(low <= high){
 			mid = (low + high) >>> 1 ;
-		    long indexIP = read4ByteAsLong((int)(firstIndexOffset + (mid - 1) * IP_RECORD_LENGTH));
-	        long indexIPNext = read4ByteAsLong((int)(firstIndexOffset + mid * IP_RECORD_LENGTH));
-		    if(indexIP <= ip && ip < indexIPNext) {
-		    	return read3ByteAsLong((int)(firstIndexOffset + (mid - 1) * IP_RECORD_LENGTH + 4));
-		    }else if(ip == indexIPNext) {
-		    	return read3ByteAsLong((int)(firstIndexOffset + mid * IP_RECORD_LENGTH + 4));
-		    } else {
-		    	if(ip > indexIP){
-				    low = mid + 1;
-				}else if(ip < indexIP){
-				    high = mid - 1;
-				}
-		    }
+		long indexIP = read4ByteAsLong((int)(firstIndexOffset + (mid - 1) * IP_RECORD_LENGTH));
+		long indexIPNext = read4ByteAsLong((int)(firstIndexOffset + mid * IP_RECORD_LENGTH));
+		if(indexIP <= ip && ip < indexIPNext) {
+			return read3ByteAsLong((int)(firstIndexOffset + (mid - 1) * IP_RECORD_LENGTH + 4));
+		}else if(ip == indexIPNext) {
+			return read3ByteAsLong((int)(firstIndexOffset + mid * IP_RECORD_LENGTH + 4));
+		} else {
+			if(ip > indexIP){
+				low = mid + 1;
+			}else if(ip < indexIP){
+				high = mid - 1;
+			}
+		}
 		}
 		return -1;
 	}
-	
+
 	public Location location(String ip) {
 		long numericIp = inet_pton(ip);
 		lock.lock();
@@ -137,11 +137,11 @@ public class IPFileConvertor {
 				return fetchLocation((int)offset);
 			}
 		} finally {
-		    lock.unlock();
+			lock.unlock();
 		}
 		return null;
 	}
-	
+
 	private Location fetchLocation(final int offset) {
 		Location loc = new Location();
 		try {
@@ -186,7 +186,7 @@ public class IPFileConvertor {
 			return readString(offset).string;
 		}
 	}
-	
+
 	private QQwryString readString(final int offset) {
 		int pos = offset;
 		final byte[] b = new byte[256];
@@ -199,13 +199,13 @@ public class IPFileConvertor {
 			return new QQwryString("",0);
 		}
 	}
-	
-	 /**
-     * @Description:“.”号分隔的字符串转换为long类型的数字
-     * @param ipStr
-     * @return	t
-     * @return:long
-     */
+
+	/**
+	 * @Description:“.”号分隔的字符串转换为long类型的数字
+	 * @param ipStr
+	 * @return	t
+	 * @return:long
+	 */
 	private static long inet_pton(String ipStr) {
 		if(ipStr == null){
 			throw new NullPointerException("ip不能为空");
@@ -217,26 +217,26 @@ public class IPFileConvertor {
 		ip |=  (Long.parseLong(arr[3])  & 0xFFL);
 		return ip;
 	}
-	
+
 	private class QQwryString{
-		
+
 		public final String string;
-		
+
 		public final int byteCount;
-		
+
 		public QQwryString(final String string,final int byteCount) {
 			this.string = string;
 			this.byteCount = byteCount;
 		}
-		
+
 		@Override
 		public String toString() {
 			return string;
 		}
 	}
-	
-	
-	public void convert(){
+
+
+	public void convert() throws Exception{
 		final long start = firstIndexOffset;
 		final long count = totalIndexCount;
 		//the ip list,order asc
@@ -268,7 +268,7 @@ public class IPFileConvertor {
 			try {
 				country = country.trim();
 				countryIndex.put(country, pos);
-				System.arraycopy(country.getBytes(),0,arr,pos,country.getBytes().length);
+				System.arraycopy(country.getBytes("GBK"),0,arr,pos,country.getBytes("GBK").length);
 				pos += country.getBytes().length;
 				//write end char
 				arr[pos++] = '\0';
@@ -277,13 +277,13 @@ public class IPFileConvertor {
 				System.exit(0);
 			}
 		}
-		
+
 		//write area info from current position
 		for(String area:areaSet) {
 			try {
 				area = area.trim();
 				areaIndex.put(area, pos);
-				System.arraycopy(area.getBytes(),0,arr,pos,area.getBytes().length);
+				System.arraycopy(area.getBytes("GBK"),0,arr,pos,area.getBytes("GBK").length);
 				pos += area.getBytes().length;
 				//write end char
 				arr[pos++] = '\0';
@@ -306,13 +306,13 @@ public class IPFileConvertor {
 			arr[pos++] = (byte) (ip >> 8 & 0xFF);
 			arr[pos++] = (byte) (ip >> 16 & 0xFF);
 			arr[pos++] = (byte) (ip >> 24 & 0xFF);
-			
+
 			//write country position
 			index1 = index1 & 0xFFFFFFFF;
 			arr[pos++] = (byte) (index1 & 0xFF);
 			arr[pos++] = (byte) (index1 >> 8 & 0xFF);
 			arr[pos++] = (byte) (index1 >> 16 & 0xFF);
-			
+
 			//write area position
 			index2 = index2 & 0xFFFFFFFF;
 			arr[pos++] = (byte) (index2 & 0xFF);
@@ -325,19 +325,19 @@ public class IPFileConvertor {
 		System.out.println("indexS:" + indexS);
 		System.out.println("indexL:" + indexL);
 		System.out.println("length:" + (pos - 1));
-		
+
 		//write the first ip index position
 		arr[0] = (byte) (indexS & 0xFF);
 		arr[1] = (byte) (indexS >> 8 & 0xFF);
 		arr[2] = (byte) (indexS >> 16 & 0xFF);
 		arr[3] = (byte) (indexS >> 24 & 0xFF);
-		
+
 		//write the last ip index position
 		arr[4] = (byte) (indexL & 0xFF);
 		arr[5] = (byte) (indexL >> 8 & 0xFF);
 		arr[6] = (byte) (indexL >> 16 & 0xFF);
 		arr[7] = (byte) (indexL >> 24 & 0xFF);
-		
+
 		//write byte array arr into newFormatFile 
 		FileOutputStream fileOut;
 		try {
@@ -351,21 +351,21 @@ public class IPFileConvertor {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 	}
-	
+
 	public static void main(String[] args) throws Exception {
 		final IPFileConvertor gen = new IPFileConvertor(IPFileConvertor.class.getResource("/qqwry.dat").getPath(),"./qq.dat");
 		gen.convert();
 	}
-	
-	 /**
-     * @Description:将long类型的ip转换为“.”分隔的ip串
-     * @time:2016年11月23日 下午4:41:11
-     * @param ip
-     * @return
-     * @return:String
-     */
+
+	/**
+	 * @Description:将long类型的ip转换为“.”分隔的ip串
+	 * @time:2016年11月23日 下午4:41:11
+	 * @param ip
+	 * @return
+	 * @return:String
+	 */
 	public static String  inet_ntoa(long ip){
 		String fmtIp = "";
 		fmtIp += String.valueOf(ip >> 24 & 0xff).concat(".");

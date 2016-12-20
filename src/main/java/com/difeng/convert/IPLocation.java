@@ -155,7 +155,7 @@ public class IPLocation {
 		int i;
 		for (i = 0, b[i] = data[pos++]; b[i] != 0; b[++i] = data[pos++]);
 		try{
-			return new String(b,0,i,"utf-8");
+			return new String(b,0,i,"GBK");
 		} catch(UnsupportedEncodingException e) {
 			return new String("");
 		}
