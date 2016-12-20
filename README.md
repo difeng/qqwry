@@ -18,6 +18,7 @@ System.out.printf("%s %s",loc.country,loc.area);
 
 ### 新添转化功能，将原文件格式转换为新格式，新格式比较简单去掉了原来的重定向标志。
 新格式如下：
+```sh
 +----------+
 |   文件头       |  (8字节) 
 +----------+
@@ -40,6 +41,7 @@ System.out.printf("%s %s",loc.country,loc.area);
 +------------+-------------------------+------------------------+
 |ip1(4 bytes) |country position(3 bytes)| area position(3 bytes)|...
 +------------+-------------------------+------------------------+
+```
 转换方法：
 ```java
 final IPFileConvertor convertor = new IPFileConvertor(IPFileConvertor.class.getResource("/qqwry.dat").getPath(),"./qqwry.dat");
