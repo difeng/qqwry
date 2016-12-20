@@ -95,7 +95,6 @@ public class IPLocation {
 	 *   ip:182.92.240.48  16进制表示(B6.5C.F0.30)
 	 *   转换后ip的16进制表示:0xB65CF030
 	 * @param ipStr
-	 * @return
 	 * @return:long
 	 */
 	private static long inet_pton(String ipStr) {

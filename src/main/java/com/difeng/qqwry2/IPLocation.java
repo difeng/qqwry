@@ -204,8 +204,7 @@ public class IPLocation {
 	
 	 /**
      * @Description:“.”号分隔的字符串转换为long类型的数字
-     * @param ipStr
-     * @return	t
+     * @param ipStr 
      * @return:long
      */
 	private static long inet_pton(String ipStr) {
