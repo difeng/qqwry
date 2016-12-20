@@ -14,7 +14,7 @@ public class IPLocationTest extends TestCase {
 	
     public void testThreadSafe() throws Exception {
     	final IPLocation ipl = new IPLocation(IPLocation.class.getResource("/qqwry.dat").getPath());
-		int num = 1;
+		int num = 4;
 		ExecutorService es = Executors.newFixedThreadPool(num);
 		long start = System.currentTimeMillis();
 		for (int i = 0; i < num;i++) {
@@ -24,7 +24,7 @@ public class IPLocationTest extends TestCase {
 					int n = 10000;
 					for(int i = 0;i < n;i++){
 						String ip = (rd.nextInt(253) + 1) + "." + rd.nextInt(255) + "." + rd.nextInt(255) + "." + (rd.nextInt(253) + 1);	
-						ipl.fetchIPLocation(ip);
+						System.out.println(ipl.fetchIPLocation(ip));
 					}
 				}
 			});
@@ -42,7 +42,8 @@ public class IPLocationTest extends TestCase {
     
     public void testLocation() throws Exception { 
     	final IPLocation ipLocation = new IPLocation(IPLocation.class.getResource("/qqwry.dat").getPath());
-    	Location loc = ipLocation.fetchIPLocation("167.22.60.127");
+    	Location loc = ipLocation.fetchIPLocation("255.92.240.50");
+    	System.out.println(loc);
     	Assert.assertNotNull(loc);
     }
 }

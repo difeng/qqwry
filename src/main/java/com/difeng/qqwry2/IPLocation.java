@@ -95,7 +95,7 @@ public class IPLocation {
 		}
 	}
 	
-	private long read4ByteAsLong(final int  offset){
+	private long read4ByteAsLong(final int  offset) {
 		long val = data[offset] & 0xFF;
 		val |= (data[offset + 1] << 8L) & 0xFF00L;
 		val |= (data[offset + 2] << 16L) & 0xFF0000L;
@@ -103,7 +103,7 @@ public class IPLocation {
 		return val;
 	}
 
-	private long read3ByteAsLong(final int offset){
+	private long read3ByteAsLong(final int offset) {
 		long val = data[offset] & 0xFF;
 		val |= (data[offset + 1] << 8) & 0xFF00;
 		val |= (data[offset + 2] << 16) & 0xFF0000;
@@ -118,13 +118,13 @@ public class IPLocation {
 			mid = (low + high) >>> 1 ;
 		    long indexIP = read4ByteAsLong((int)(firstIndexOffset + (mid - 1) * IP_RECORD_LENGTH));
 	        long indexIPNext = read4ByteAsLong((int)(firstIndexOffset + mid * IP_RECORD_LENGTH));
-		    if(indexIP <= ip && ip < indexIPNext){
+		    if(indexIP <= ip && ip < indexIPNext) {
 		    	return read3ByteAsLong((int)(firstIndexOffset + (mid - 1) * IP_RECORD_LENGTH + 4));
-		    }else{
-		    	if(ip > indexIP){
-				    low = mid;
-				}else if(ip < indexIP){
-				    high = mid;
+		    } else {
+		    	if(ip > indexIP) {
+				    low = mid + 1;
+				} else if (ip < indexIP) {
+				    high = mid - 1;
 				}
 		    }
 		}

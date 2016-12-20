@@ -122,9 +122,9 @@ public class IPLocation {
 		    	return read3ByteAsLong(firstIndexOffset + (mid - 1) * IP_RECORD_LENGTH + 4);
 		    } else {
 		    	if(ip > indexIP) {
-		    		low = mid;
+		    		low = mid + 1;
 		    	} else if(ip < indexIP) {
-		    		high = mid;
+		    		high = mid - 1;
 		    	}
 		    }
 		}
