@@ -269,7 +269,7 @@ public class IPFileConvertor {
 				country = country.trim();
 				countryIndex.put(country, pos);
 				System.arraycopy(country.getBytes("GBK"),0,arr,pos,country.getBytes("GBK").length);
-				pos += country.getBytes().length;
+				pos += country.getBytes("GBK").length;
 				//write end char
 				arr[pos++] = '\0';
 			} catch (Exception e) {
@@ -284,10 +284,10 @@ public class IPFileConvertor {
 				area = area.trim();
 				areaIndex.put(area, pos);
 				System.arraycopy(area.getBytes("GBK"),0,arr,pos,area.getBytes("GBK").length);
-				pos += area.getBytes().length;
+				pos += area.getBytes("GBK").length;
 				//write end char
 				arr[pos++] = '\0';
-			}catch(Exception e){
+			} catch(Exception e) {
 				System.out.println(pos);
 				System.exit(0);
 			}
