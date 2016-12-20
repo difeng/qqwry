@@ -39,7 +39,7 @@ System.out.printf("%s %s",loc.country,loc.area);
 +------------------+----------+------------------+----------+-----
 索引区：
 +------------+-------------------------+------------------------+
-|ip1(4 bytes) |country position(3 bytes)| area position(3 bytes)|...
+|ip1(4 bytes)|country position(3 bytes)| area position(3 bytes) |...
 +------------+-------------------------+------------------------+
 ```
 转换方法：
