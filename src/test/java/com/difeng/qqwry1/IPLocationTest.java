@@ -24,7 +24,7 @@ public class IPLocationTest extends TestCase{
 					int n = 10000;
 					for(int i = 0;i < n;i++) {
 						String ip = (rd.nextInt(253) + 1) + "." + rd.nextInt(255) + "." + rd.nextInt(255) + "." + (rd.nextInt(253) + 1);	
-						System.out.println(ipLocation.fetchIPLocation(ip));
+						ipLocation.fetchIPLocation(ip);
 					}
 				}
 			});
