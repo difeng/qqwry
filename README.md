@@ -55,7 +55,8 @@ convertor.convert();
 ```  
 ip库文件 生成调用示例
 ``` java  
- File infile = new File("./ip_data.txt"); File outFile = new File("test.dat"); IPFileMaker iPFileMaker = new IPFileMaker( infile, outFile ); iPFileMaker.make();
+ File infile = new File("./ip_data.txt"); File outFile = new File("test.dat"); 
+ IPFileMaker iPFileMaker = new IPFileMaker( infile, outFile ); iPFileMaker.make();
  ```  
 使用制作好的ip库文件
 ``` java  
