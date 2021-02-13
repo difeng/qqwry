@@ -42,7 +42,7 @@ public class IPLocationTest extends TestCase {
     
     public void testLocation() throws Exception { 
     	final IPLocation ipLocation = new IPLocation(IPLocation.class.getResource("/qqwry.dat").getPath());
-    	Location loc = ipLocation.fetchIPLocation("255.92.240.50");
+    	Location loc = ipLocation.fetchIPLocation("124.126.138.233");
     	System.out.println(loc);
     	Assert.assertNotNull(loc);
     }
